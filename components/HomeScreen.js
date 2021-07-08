@@ -1,16 +1,18 @@
 import * as React from "react";
-import {Pressable, StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import Cactus_img from "../img/cactus_img";
 import * as Font from 'expo-font';
 import {useEffect, useState} from "react";
 import { Button } from 'native-base';
+import {NativeBaseProvider} from "native-base";
+
 
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        marginBottom: -80
+        paddingBottom: -100
     },
 
     gametitle: {
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
         fontSize: 50,
         color: "#707070",
         padding: 21,
-        paddingTop: 0,
+        paddingTop: 70,
         textAlign: 'center'
 
     },
@@ -28,11 +30,21 @@ const styles = StyleSheet.create({
         fontSize: 27,
         color: "#707070",
         paddingTop: 50,
-        paddingBottom: 150
+        paddingBottom: 150,
+        textAlign: 'center'
     },
 
     button: {
-        backgroundColor: 'red'
+        backgroundColor: '#D5884C',
+        width: '40.6%',
+        height: '7.2%',
+        alignSelf: 'center'
+    },
+
+    buttonstyle: {
+        fontFamily: "RobotoSlab-Regular",
+        fontSize: 30,
+        color: '#4B4B4B'
     }
 });
 
@@ -83,14 +95,12 @@ function HomeScreen({navigation}) {
     }
 
     return (
-
-        <View style={styles.screen}>
+        <NativeBaseProvider style={styles.screen}>
             <Text style={styles.gametitle}>Fastest Finger in the West</Text>
             <Text style={styles.highscore}>Highscore: 40</Text>
-            <Pressable style={styles.button} title="Play" onPress={() => navigation.push('Game')}
-            />
+            <Button style={styles.button} onPress={() => navigation.push('Game')}><Text style={styles.buttonstyle}>PLAY</Text></Button>
             <Cactus_img/>
-        </View>
+        </NativeBaseProvider>
     );
 }
 
