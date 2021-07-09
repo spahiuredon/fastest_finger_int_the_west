@@ -79,7 +79,7 @@ function GameScreen(type, handler) {
         try {
             const result = await Share.share({
                 message:
-                    "Hello " + count,
+                    "I tipped " + count + "times in 15 seconds on my phone. How fast can you do it?",
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
