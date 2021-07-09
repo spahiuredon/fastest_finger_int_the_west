@@ -5,6 +5,7 @@ import * as Font from 'expo-font';
 import {useEffect, useState} from "react";
 import { Button } from 'native-base';
 import {NativeBaseProvider} from "native-base";
+import { AsyncStorage } from 'react-native';
 
 
 const styles = StyleSheet.create({
@@ -65,7 +66,19 @@ async function loadFonts() {
 }
 
 function HomeScreen({navigation}) {
-    const [fontsloaded, setFontsloaded] = useState(false)
+    const [fontsloaded, setFontsloaded] = useState(false);
+
+    const _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('SCORE');
+            if (value !== null) {
+                // We have data!!
+                console.log(value);
+            }
+        } catch (error) {
+            // Error retrieving data
+        }
+    };
 
     useEffect(() => {
         loadFonts();
@@ -94,10 +107,13 @@ function HomeScreen({navigation}) {
         )
     }
 
+    let highscore;
+    highscore = _retrieveData();
+
     return (
         <NativeBaseProvider style={styles.screen}>
             <Text style={styles.gametitle}>Fastest Finger in the West</Text>
-            <Text style={styles.highscore}>Highscore: 40</Text>
+            <Text style={styles.highscore}>Highscore: </Text>
             <Button style={styles.button} onPress={() => navigation.push('Game')}><Text style={styles.buttonstyle}>PLAY</Text></Button>
             <Cactus_img/>
         </NativeBaseProvider>

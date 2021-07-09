@@ -11,7 +11,7 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} options={{title: "Overview", headerShown: false}}/>
-          <Stack.Screen name="Game" component={GameScreen} options={{ title: "This is the Game Screen"}} />
+          <Stack.Screen name="Game" component={GameScreen} options={{ title: ""}} />
         </Stack.Navigator>
       </NavigationContainer>
   );
