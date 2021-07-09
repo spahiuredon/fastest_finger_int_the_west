@@ -3,6 +3,7 @@ import {AsyncStorage, Share, StyleSheet, Text, TouchableOpacity} from "react-nat
 import {Button, Icon, NativeBaseProvider} from "native-base";
 import {useEffect, useState} from "react";
 import RNShake from 'react-native-shake';
+import {ShakeEventExpo} from "../shake-event-expo-crna/ShakeEventExpo";
 
 const styles = StyleSheet.create({
     screen: {
@@ -72,20 +73,7 @@ const styles = StyleSheet.create({
 function GameScreen(type, handler) {
     const [count, setCount] = useState(0);
     const onPress = () => setCount(prevCount => prevCount + 1);
-
-    const _storeData = async () => {
-        if (count > await AsyncStorage.getItem('SCORE'))
-            try {
-                await AsyncStorage.setItem(
-                    'SCORE',
-                    {count}
-                );
-            } catch (error) {
-                // Error saving data
-            }
-    };
-
-    const [prepCountdown, setPrepCountdown] = React.useState(5);
+    const [prepCountdown, setPrepCountdown] = useState(15);
 
     const onShare = async () => {
         try {
@@ -107,19 +95,25 @@ function GameScreen(type, handler) {
     function shakeHandler() {
         console.log("Phone did shake");
         if (prepCountdown > 0) {
+
             setTimeout(() => setPrepCountdown(prepCountdown - 1), 1000);
+
         } else {
             setPrepCountdown('BOOOOM!');
+
         }
     }
 
     useEffect(() => {
         console.log("UseEffect:")
-        RNShake.addListener(() => {
+        ShakeEventExpo.addListener(() => {
             console.log("shke")
             shakeHandler()
+            setTimeout(() => setPrepCountdown(prepCountdown - 1), 1000);
+
+
         });
-        return () => RNShake.removeListener(() => {
+        return () => ShakeEventExpo.removeListener(() => {
             console.log("removed listener")
         });
     }, []);

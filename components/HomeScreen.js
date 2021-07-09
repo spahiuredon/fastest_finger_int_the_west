@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import { Button } from 'native-base';
 import {NativeBaseProvider} from "native-base";
 import { AsyncStorage } from 'react-native';
-
+import GameScreen from "./GameScreen"
 
 const styles = StyleSheet.create({
     screen: {
@@ -49,6 +49,8 @@ const styles = StyleSheet.create({
     }
 });
 
+
+
 async function loadFonts() {
     const [fontsloaded, setFontsloaded] = useState(false)
     await Font.loadAsync({
@@ -67,6 +69,31 @@ async function loadFonts() {
 
 function HomeScreen({navigation}) {
     const [fontsloaded, setFontsloaded] = useState(false);
+    const [highScore, setHighScore] = useState();
+
+    useEffect(() => {
+        getStoredHighScore();
+    }, []);
+
+    const getStoredHighScore = async () => {
+        try {
+            const value = await AsyncStorage.getItem('highScore')
+            if (value !== null) setHighScore(parseFloat(value));
+        } catch (e) { }
+    }
+
+    const storeHighScore = async (value) => {
+        try {
+            await AsyncStorage.setItem('highScore', "" + value)
+        } catch (e) { console.error("HighScore not stored: " + e) }
+    }
+
+    function evaluateHighScore(score) {
+        if (score < highScore || highScore == undefined) {
+            setHighScore(score);
+            storeHighScore(score);
+        }
+    }
 
     const _retrieveData = async () => {
         try {
@@ -100,17 +127,14 @@ function HomeScreen({navigation}) {
         setFontsloaded(true);
     }
 
-
     if (!fontsloaded) {
         return (
             <Text>Fonts not loaded!</Text>
         )
     }
 
-    let highscore;
-    highscore = _retrieveData();
-
     return (
+
         <NativeBaseProvider style={styles.screen}>
             <Text style={styles.gametitle}>Fastest Finger in the West</Text>
             <Text style={styles.highscore}>Highscore: </Text>
