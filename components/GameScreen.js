@@ -1,7 +1,8 @@
 import * as React from "react";
 import {Share, StyleSheet, Text, TouchableOpacity} from "react-native";
 import {Button, NativeBaseProvider} from "native-base";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import RNShake from 'react-native-shake';
 
 const styles = StyleSheet.create({
     screen: {
@@ -57,6 +58,17 @@ function GameScreen() {
     const [count, setCount] = useState(0);
     const onPress = () => setCount(prevCount => prevCount + 1);
 
+    const [prepCountdown, setPrepCountdown] = React.useState(5);
+
+    useEffect(() => {
+        if (prepCountdown > 0) {
+            setTimeout(() => setPrepCountdown(prepCountdown - 1), 1000);
+        } else {
+            componentDidMount();
+        }
+    });
+
+
     const onShare = async () => {
         try {
             const result = await Share.share({
@@ -74,10 +86,19 @@ function GameScreen() {
         }
     };
 
+    function componentDidMount() {
+        RNShake.addListener(() => {
+        });
+    };
+
+    function componentWillUnmount() {
+        RNShake.removeListener();
+    };
+
     return (
         <NativeBaseProvider style={styles.screen}>
                 <Text style={styles.gametitle}>Shake to start!</Text>
-                <Text style={styles.gametitle}>Time</Text>
+                <Text style={styles.gametitle}>{prepCountdown}</Text>
             <TouchableOpacity
                 activeOpacity={1}
                 style={styles.touch}
